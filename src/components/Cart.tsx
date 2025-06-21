@@ -1,7 +1,6 @@
-
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Minus, Plus, Trash2, ShoppingBag } from "lucide-react";
+import { Minus, Plus, Trash2, ShoppingBag, ArrowLeft } from "lucide-react";
 import { useCart } from "@/context/CartContext";
 
 interface CartProps {
@@ -9,20 +8,20 @@ interface CartProps {
 }
 
 export const Cart = ({ setCurrentPage }: CartProps) => {
-  const { cartItems, removeFromCart, updateQuantity, getTotalPrice } = useCart();
+  const { items, updateQuantity, removeFromCart, getTotalPrice, clearCart } = useCart();
 
-  if (cartItems.length === 0) {
+  if (items.length === 0) {
     return (
       <div className="container mx-auto px-4 py-8">
         <div className="text-center py-16">
           <ShoppingBag className="h-24 w-24 text-gray-300 mx-auto mb-4" />
-          <h2 className="text-3xl font-bold text-gray-600 mb-4">Your cart is empty</h2>
-          <p className="text-gray-500 mb-8">Add some amazing posters to get started!</p>
+          <h2 className="text-2xl font-bold text-gray-600 mb-2">Your cart is empty</h2>
+          <p className="text-gray-500 mb-6">Start learning with our amazing study notes!</p>
           <Button 
             onClick={() => setCurrentPage("home")}
-            className="bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700"
+            className="bg-indigo-600 hover:bg-indigo-700"
           >
-            Continue Shopping
+            Browse Notes
           </Button>
         </div>
       </div>
@@ -31,61 +30,62 @@ export const Cart = ({ setCurrentPage }: CartProps) => {
 
   return (
     <div className="container mx-auto px-4 py-8">
-      <div className="mb-8">
-        <h1 className="text-4xl font-bold text-center bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent mb-4">
-          Shopping Cart
-        </h1>
-        <p className="text-center text-gray-600">
-          {cartItems.length} item{cartItems.length !== 1 ? 's' : ''} in your cart
-        </p>
+      <div className="flex items-center space-x-4 mb-8">
+        <Button
+          variant="ghost"
+          onClick={() => setCurrentPage("home")}
+          className="hover:bg-indigo-50"
+        >
+          <ArrowLeft className="h-4 w-4 mr-2" />
+          Continue Shopping
+        </Button>
+        <h1 className="text-3xl font-bold text-gray-800">Your Cart</h1>
       </div>
 
-      <div className="grid lg:grid-cols-3 gap-8">
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
         <div className="lg:col-span-2 space-y-4">
-          {cartItems.map((item) => (
-            <Card key={item.id} className="overflow-hidden hover-scale">
-              <CardContent className="p-4">
-                <div className="flex gap-4">
+          {items.map((item) => (
+            <Card key={item.id} className="bg-white/80 backdrop-blur-sm border-0 shadow-lg">
+              <CardContent className="p-6">
+                <div className="flex items-center space-x-4">
                   <img
                     src={item.image}
                     alt={item.title}
-                    className="w-24 h-24 object-cover rounded-lg"
+                    className="w-20 h-20 object-cover rounded-lg"
                   />
                   <div className="flex-1">
-                    <h3 className="font-semibold text-lg mb-2">{item.title}</h3>
-                    <p className="text-xl font-bold text-purple-600 mb-4">₹{item.price}</p>
-                    
-                    <div className="flex items-center gap-4">
-                      <div className="flex items-center gap-2">
-                        <Button
-                          size="sm"
-                          variant="outline"
-                          onClick={() => updateQuantity(item.id, item.quantity - 1)}
-                          className="h-8 w-8 p-0"
-                        >
-                          <Minus className="h-4 w-4" />
-                        </Button>
-                        <span className="w-12 text-center font-semibold">{item.quantity}</span>
-                        <Button
-                          size="sm"
-                          variant="outline"
-                          onClick={() => updateQuantity(item.id, item.quantity + 1)}
-                          className="h-8 w-8 p-0"
-                        >
-                          <Plus className="h-4 w-4" />
-                        </Button>
-                      </div>
-                      
+                    <h3 className="text-lg font-semibold text-gray-800 mb-1">{item.title}</h3>
+                    <p className="text-sm text-gray-600 mb-2">{item.subject} • {item.author}</p>
+                    <p className="text-xl font-bold text-indigo-600">₹{item.price}</p>
+                  </div>
+                  <div className="flex items-center space-x-3">
+                    <div className="flex items-center space-x-2 bg-gray-100 rounded-lg p-1">
                       <Button
+                        variant="ghost"
                         size="sm"
-                        variant="destructive"
-                        onClick={() => removeFromCart(item.id)}
-                        className="ml-auto"
+                        onClick={() => updateQuantity(item.id, item.quantity - 1)}
+                        className="h-8 w-8 p-0 hover:bg-gray-200"
                       >
-                        <Trash2 className="h-4 w-4 mr-1" />
-                        Remove
+                        <Minus className="h-4 w-4" />
+                      </Button>
+                      <span className="w-8 text-center font-medium">{item.quantity}</span>
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        onClick={() => updateQuantity(item.id, item.quantity + 1)}
+                        className="h-8 w-8 p-0 hover:bg-gray-200"
+                      >
+                        <Plus className="h-4 w-4" />
                       </Button>
                     </div>
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      onClick={() => removeFromCart(item.id)}
+                      className="text-red-500 hover:text-red-700 hover:bg-red-50"
+                    >
+                      <Trash2 className="h-4 w-4" />
+                    </Button>
                   </div>
                 </div>
               </CardContent>
@@ -93,41 +93,28 @@ export const Cart = ({ setCurrentPage }: CartProps) => {
           ))}
         </div>
 
-        <div>
-          <Card className="sticky top-24">
+        <div className="lg:col-span-1">
+          <Card className="bg-white/80 backdrop-blur-sm border-0 shadow-lg sticky top-24">
             <CardHeader>
-              <CardTitle className="text-2xl">Order Summary</CardTitle>
+              <CardTitle className="text-xl text-gray-800">Order Summary</CardTitle>
             </CardHeader>
             <CardContent className="space-y-4">
-              <div className="space-y-2">
-                {cartItems.map((item) => (
-                  <div key={item.id} className="flex justify-between text-sm">
-                    <span>{item.title} x {item.quantity}</span>
-                    <span>₹{item.price * item.quantity}</span>
-                  </div>
-                ))}
+              <div className="flex justify-between text-lg font-semibold">
+                <span>Total:</span>
+                <span className="text-indigo-600">₹{getTotalPrice()}</span>
               </div>
-              
-              <div className="border-t pt-4">
-                <div className="flex justify-between text-lg font-bold">
-                  <span>Total</span>
-                  <span className="text-purple-600">₹{getTotalPrice()}</span>
-                </div>
-              </div>
-              
-              <Button 
-                className="w-full bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-lg py-6"
+              <Button
                 onClick={() => setCurrentPage("checkout")}
+                className="w-full bg-indigo-600 hover:bg-indigo-700 text-white py-3"
               >
                 Proceed to Checkout
               </Button>
-              
-              <Button 
-                variant="outline" 
-                className="w-full"
-                onClick={() => setCurrentPage("home")}
+              <Button
+                variant="outline"
+                onClick={clearCart}
+                className="w-full text-red-600 border-red-300 hover:bg-red-50"
               >
-                Continue Shopping
+                Clear Cart
               </Button>
             </CardContent>
           </Card>
