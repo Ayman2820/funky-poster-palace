@@ -17,12 +17,16 @@ const Index = () => {
     setCurrentPage("preview");
   };
 
+  const handleSetCurrentPage = (page: "home" | "cart" | "checkout") => {
+    setCurrentPage(page);
+  };
+
   return (
     <CartProvider>
       <div className="min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50">
         <Header 
           currentPage={currentPage} 
-          setCurrentPage={setCurrentPage}
+          setCurrentPage={handleSetCurrentPage}
           selectedCategory={selectedCategory}
           setSelectedCategory={setSelectedCategory}
         />
@@ -44,12 +48,12 @@ const Index = () => {
           </main>
         )}
         
-        {currentPage === "cart" && <Cart setCurrentPage={setCurrentPage} />}
-        {currentPage === "checkout" && <CheckoutPage setCurrentPage={setCurrentPage} />}
+        {currentPage === "cart" && <Cart setCurrentPage={handleSetCurrentPage} />}
+        {currentPage === "checkout" && <CheckoutPage setCurrentPage={handleSetCurrentPage} />}
         {currentPage === "preview" && selectedNote && (
           <NotePreview 
             note={selectedNote} 
-            setCurrentPage={setCurrentPage}
+            setCurrentPage={handleSetCurrentPage}
             onPreviewNote={handlePreviewNote}
           />
         )}
