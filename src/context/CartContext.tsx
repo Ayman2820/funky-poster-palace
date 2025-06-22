@@ -1,13 +1,15 @@
+
 import React, { createContext, useContext, useState, ReactNode } from 'react';
 
 interface CartItem {
   id: number;
-  title: string;
+  name: string;
   price: number;
   quantity: number;
   image: string;
-  author: string;
-  subject: string;
+  description: string;
+  restaurantName: string;
+  veg?: boolean;
 }
 
 interface CartContextType {
@@ -38,12 +40,13 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
       } else {
         return [...currentItems, {
           id: item.id,
-          title: item.title,
+          name: item.name,
           price: item.price,
           quantity: 1,
           image: item.image,
-          author: item.author,
-          subject: item.subject
+          description: item.description,
+          restaurantName: item.restaurantName,
+          veg: item.veg
         }];
       }
     });

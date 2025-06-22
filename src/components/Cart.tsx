@@ -1,6 +1,7 @@
+
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Minus, Plus, Trash2, ShoppingBag, ArrowLeft } from "lucide-react";
+import { Minus, Plus, Trash2, ShoppingBag, ArrowLeft, Leaf } from "lucide-react";
 import { useCart } from "@/context/CartContext";
 
 interface CartProps {
@@ -16,12 +17,12 @@ export const Cart = ({ setCurrentPage }: CartProps) => {
         <div className="text-center py-16">
           <ShoppingBag className="h-24 w-24 text-gray-300 mx-auto mb-4" />
           <h2 className="text-2xl font-bold text-gray-600 mb-2">Your cart is empty</h2>
-          <p className="text-gray-500 mb-6">Start learning with our amazing study notes!</p>
+          <p className="text-gray-500 mb-6">Order some delicious food!</p>
           <Button 
             onClick={() => setCurrentPage("home")}
-            className="bg-indigo-600 hover:bg-indigo-700"
+            className="bg-orange-600 hover:bg-orange-700"
           >
-            Browse Notes
+            Browse Restaurants
           </Button>
         </div>
       </div>
@@ -34,10 +35,10 @@ export const Cart = ({ setCurrentPage }: CartProps) => {
         <Button
           variant="ghost"
           onClick={() => setCurrentPage("home")}
-          className="hover:bg-indigo-50"
+          className="hover:bg-orange-50"
         >
           <ArrowLeft className="h-4 w-4 mr-2" />
-          Continue Shopping
+          Continue Ordering
         </Button>
         <h1 className="text-3xl font-bold text-gray-800">Your Cart</h1>
       </div>
@@ -50,13 +51,17 @@ export const Cart = ({ setCurrentPage }: CartProps) => {
                 <div className="flex items-center space-x-4">
                   <img
                     src={item.image}
-                    alt={item.title}
+                    alt={item.name}
                     className="w-20 h-20 object-cover rounded-lg"
                   />
                   <div className="flex-1">
-                    <h3 className="text-lg font-semibold text-gray-800 mb-1">{item.title}</h3>
-                    <p className="text-sm text-gray-600 mb-2">{item.subject} • {item.author}</p>
-                    <p className="text-xl font-bold text-indigo-600">₹{item.price}</p>
+                    <div className="flex items-center space-x-2 mb-1">
+                      <h3 className="text-lg font-semibold text-gray-800">{item.name}</h3>
+                      {item.veg && <Leaf className="h-4 w-4 text-green-500 fill-green-500" />}
+                    </div>
+                    <p className="text-sm text-gray-600 mb-1">{item.restaurantName}</p>
+                    <p className="text-sm text-gray-500 mb-2 line-clamp-1">{item.description}</p>
+                    <p className="text-xl font-bold text-orange-600">₹{item.price}</p>
                   </div>
                   <div className="flex items-center space-x-3">
                     <div className="flex items-center space-x-2 bg-gray-100 rounded-lg p-1">
@@ -99,13 +104,28 @@ export const Cart = ({ setCurrentPage }: CartProps) => {
               <CardTitle className="text-xl text-gray-800">Order Summary</CardTitle>
             </CardHeader>
             <CardContent className="space-y-4">
-              <div className="flex justify-between text-lg font-semibold">
-                <span>Total:</span>
-                <span className="text-indigo-600">₹{getTotalPrice()}</span>
+              <div className="space-y-2">
+                <div className="flex justify-between text-sm">
+                  <span>Subtotal:</span>
+                  <span>₹{getTotalPrice()}</span>
+                </div>
+                <div className="flex justify-between text-sm">
+                  <span>Delivery Fee:</span>
+                  <span>₹49</span>
+                </div>
+                <div className="flex justify-between text-sm">
+                  <span>Taxes:</span>
+                  <span>₹{Math.round(getTotalPrice() * 0.18)}</span>
+                </div>
+                <hr />
+                <div className="flex justify-between text-lg font-semibold">
+                  <span>Total:</span>
+                  <span className="text-orange-600">₹{getTotalPrice() + 49 + Math.round(getTotalPrice() * 0.18)}</span>
+                </div>
               </div>
               <Button
                 onClick={() => setCurrentPage("checkout")}
-                className="w-full bg-indigo-600 hover:bg-indigo-700 text-white py-3"
+                className="w-full bg-orange-600 hover:bg-orange-700 text-white py-3"
               >
                 Proceed to Checkout
               </Button>
