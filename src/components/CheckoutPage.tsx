@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { ArrowLeft, CreditCard, Smartphone, Wallet, MapPin } from "lucide-react";
+import { ArrowLeft, CreditCard, Smartphone, Wallet, User } from "lucide-react";
 import { useCart } from "@/context/CartContext";
 
 interface CheckoutPageProps {
@@ -15,14 +15,14 @@ export const CheckoutPage = ({ setCurrentPage }: CheckoutPageProps) => {
   const { items, getTotalPrice, clearCart } = useCart();
   const [selectedPayment, setSelectedPayment] = useState<"card" | "upi" | "wallet">("card");
   const [orderPlaced, setOrderPlaced] = useState(false);
-  const [deliveryAddress, setDeliveryAddress] = useState({
-    street: "",
-    city: "",
-    pincode: "",
-    landmark: ""
+  const [studentInfo, setStudentInfo] = useState({
+    name: "",
+    email: "",
+    phone: "",
+    organization: ""
   });
 
-  const totalAmount = getTotalPrice() + 49 + Math.round(getTotalPrice() * 0.18);
+  const totalAmount = getTotalPrice() + 99 + Math.round(getTotalPrice() * 0.18);
 
   const handlePlaceOrder = () => {
     setOrderPlaced(true);
@@ -41,8 +41,8 @@ export const CheckoutPage = ({ setCurrentPage }: CheckoutPageProps) => {
               <span className="text-white font-bold">✓</span>
             </div>
           </div>
-          <h2 className="text-2xl font-bold text-gray-800 mb-2">Order Placed Successfully!</h2>
-          <p className="text-gray-600 mb-4">Your delicious food will be delivered in 30-45 minutes.</p>
+          <h2 className="text-2xl font-bold text-gray-800 mb-2">Enrollment Successful!</h2>
+          <p className="text-gray-600 mb-4">Welcome to your learning journey! You can now access your courses.</p>
           <p className="text-sm text-gray-500">Redirecting to home page...</p>
         </div>
       </div>
@@ -54,7 +54,7 @@ export const CheckoutPage = ({ setCurrentPage }: CheckoutPageProps) => {
       <Button
         variant="ghost"
         onClick={() => setCurrentPage("cart")}
-        className="mb-6 hover:bg-orange-50"
+        className="mb-6 hover:bg-indigo-50"
       >
         <ArrowLeft className="h-4 w-4 mr-2" />
         Back to Cart
@@ -62,51 +62,52 @@ export const CheckoutPage = ({ setCurrentPage }: CheckoutPageProps) => {
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
         <div className="space-y-6">
-          {/* Delivery Address */}
+          {/* Student Information */}
           <Card className="bg-white/80 backdrop-blur-sm border-0 shadow-lg">
             <CardHeader>
               <CardTitle className="text-xl text-gray-800 flex items-center">
-                <MapPin className="h-5 w-5 mr-2" />
-                Delivery Address
+                <User className="h-5 w-5 mr-2" />
+                Student Information
               </CardTitle>
             </CardHeader>
             <CardContent className="space-y-4">
               <div>
-                <Label htmlFor="street">Street Address</Label>
+                <Label htmlFor="name">Full Name</Label>
                 <Input
-                  id="street"
-                  placeholder="Enter your street address"
-                  value={deliveryAddress.street}
-                  onChange={(e) => setDeliveryAddress({...deliveryAddress, street: e.target.value})}
+                  id="name"
+                  placeholder="Enter your full name"
+                  value={studentInfo.name}
+                  onChange={(e) => setStudentInfo({...studentInfo, name: e.target.value})}
                 />
               </div>
-              <div className="grid grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
-                  <Label htmlFor="city">City</Label>
+                  <Label htmlFor="email">Email Address</Label>
                   <Input
-                    id="city"
-                    placeholder="City"
-                    value={deliveryAddress.city}
-                    onChange={(e) => setDeliveryAddress({...deliveryAddress, city: e.target.value})}
+                    id="email"
+                    type="email"
+                    placeholder="your@email.com"
+                    value={studentInfo.email}
+                    onChange={(e) => setStudentInfo({...studentInfo, email: e.target.value})}
                   />
                 </div>
                 <div>
-                  <Label htmlFor="pincode">Pincode</Label>
+                  <Label htmlFor="phone">Phone Number</Label>
                   <Input
-                    id="pincode"
-                    placeholder="Pincode"
-                    value={deliveryAddress.pincode}
-                    onChange={(e) => setDeliveryAddress({...deliveryAddress, pincode: e.target.value})}
+                    id="phone"
+                    placeholder="Your phone number"
+                    value={studentInfo.phone}
+                    onChange={(e) => setStudentInfo({...studentInfo, phone: e.target.value})}
                   />
                 </div>
               </div>
               <div>
-                <Label htmlFor="landmark">Landmark (Optional)</Label>
+                <Label htmlFor="organization">School/Organization (Optional)</Label>
                 <Input
-                  id="landmark"
-                  placeholder="Nearby landmark"
-                  value={deliveryAddress.landmark}
-                  onChange={(e) => setDeliveryAddress({...deliveryAddress, landmark: e.target.value})}
+                  id="organization"
+                  placeholder="Your school or organization"
+                  value={studentInfo.organization}
+                  onChange={(e) => setStudentInfo({...studentInfo, organization: e.target.value})}
                 />
               </div>
             </CardContent>
@@ -120,12 +121,12 @@ export const CheckoutPage = ({ setCurrentPage }: CheckoutPageProps) => {
             <CardContent className="space-y-4">
               <div
                 className={`p-4 border-2 rounded-lg cursor-pointer transition-colors ${
-                  selectedPayment === "card" ? "border-orange-500 bg-orange-50" : "border-gray-200"
+                  selectedPayment === "card" ? "border-indigo-500 bg-indigo-50" : "border-gray-200"
                 }`}
                 onClick={() => setSelectedPayment("card")}
               >
                 <div className="flex items-center space-x-3">
-                  <CreditCard className="h-6 w-6 text-orange-600" />
+                  <CreditCard className="h-6 w-6 text-indigo-600" />
                   <div>
                     <h3 className="font-medium text-gray-800">Credit/Debit Card</h3>
                     <p className="text-sm text-gray-600">Pay securely with your card</p>
@@ -135,12 +136,12 @@ export const CheckoutPage = ({ setCurrentPage }: CheckoutPageProps) => {
 
               <div
                 className={`p-4 border-2 rounded-lg cursor-pointer transition-colors ${
-                  selectedPayment === "upi" ? "border-orange-500 bg-orange-50" : "border-gray-200"
+                  selectedPayment === "upi" ? "border-indigo-500 bg-indigo-50" : "border-gray-200"
                 }`}
                 onClick={() => setSelectedPayment("upi")}
               >
                 <div className="flex items-center space-x-3">
-                  <Smartphone className="h-6 w-6 text-orange-600" />
+                  <Smartphone className="h-6 w-6 text-indigo-600" />
                   <div>
                     <h3 className="font-medium text-gray-800">UPI Payment</h3>
                     <p className="text-sm text-gray-600">Pay using UPI apps</p>
@@ -150,12 +151,12 @@ export const CheckoutPage = ({ setCurrentPage }: CheckoutPageProps) => {
 
               <div
                 className={`p-4 border-2 rounded-lg cursor-pointer transition-colors ${
-                  selectedPayment === "wallet" ? "border-orange-500 bg-orange-50" : "border-gray-200"
+                  selectedPayment === "wallet" ? "border-indigo-500 bg-indigo-50" : "border-gray-200"
                 }`}
                 onClick={() => setSelectedPayment("wallet")}
               >
                 <div className="flex items-center space-x-3">
-                  <Wallet className="h-6 w-6 text-orange-600" />
+                  <Wallet className="h-6 w-6 text-indigo-600" />
                   <div>
                     <h3 className="font-medium text-gray-800">Digital Wallet</h3>
                     <p className="text-sm text-gray-600">Paytm, PhonePe, etc.</p>
@@ -169,14 +170,14 @@ export const CheckoutPage = ({ setCurrentPage }: CheckoutPageProps) => {
         <div className="space-y-6">
           <Card className="bg-white/80 backdrop-blur-sm border-0 shadow-lg">
             <CardHeader>
-              <CardTitle className="text-xl text-gray-800">Order Summary</CardTitle>
+              <CardTitle className="text-xl text-gray-800">Enrollment Summary</CardTitle>
             </CardHeader>
             <CardContent className="space-y-4">
               {items.map((item) => (
-                <div key={item.id} className="flex justify-between items-center py-2">
+                <div key={item.id} className="flex justify-between items-center py-2 border-b border-gray-100 last:border-b-0">
                   <div>
-                    <h4 className="font-medium text-gray-800">{item.name}</h4>
-                    <p className="text-sm text-gray-600">{item.restaurantName} • Qty: {item.quantity}</p>
+                    <h4 className="font-medium text-gray-800">{item.title}</h4>
+                    <p className="text-sm text-gray-600">by {item.instructor} • Qty: {item.quantity}</p>
                   </div>
                   <span className="font-medium text-gray-800">₹{item.price * item.quantity}</span>
                 </div>
@@ -187,8 +188,8 @@ export const CheckoutPage = ({ setCurrentPage }: CheckoutPageProps) => {
                   <span>₹{getTotalPrice()}</span>
                 </div>
                 <div className="flex justify-between text-sm">
-                  <span>Delivery Fee:</span>
-                  <span>₹49</span>
+                  <span>Platform Fee:</span>
+                  <span>₹99</span>
                 </div>
                 <div className="flex justify-between text-sm">
                   <span>Taxes (18%):</span>
@@ -196,14 +197,14 @@ export const CheckoutPage = ({ setCurrentPage }: CheckoutPageProps) => {
                 </div>
                 <div className="flex justify-between items-center text-lg font-semibold pt-2 border-t">
                   <span>Total:</span>
-                  <span className="text-orange-600">₹{totalAmount}</span>
+                  <span className="text-indigo-600">₹{totalAmount}</span>
                 </div>
               </div>
               <Button
                 onClick={handlePlaceOrder}
-                className="w-full bg-orange-600 hover:bg-orange-700 text-white py-3 text-lg"
+                className="w-full bg-indigo-600 hover:bg-indigo-700 text-white py-3 text-lg"
               >
-                Place Order - ₹{totalAmount}
+                Complete Enrollment - ₹{totalAmount}
               </Button>
             </CardContent>
           </Card>

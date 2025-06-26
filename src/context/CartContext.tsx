@@ -3,13 +3,14 @@ import React, { createContext, useContext, useState, ReactNode } from 'react';
 
 interface CartItem {
   id: number;
-  name: string;
+  title: string;
   price: number;
   quantity: number;
   image: string;
   description: string;
-  restaurantName: string;
-  veg?: boolean;
+  instructor: string;
+  duration: string;
+  level: string;
 }
 
 interface CartContextType {
@@ -40,13 +41,14 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
       } else {
         return [...currentItems, {
           id: item.id,
-          name: item.name,
+          title: item.title,
           price: item.price,
           quantity: 1,
           image: item.image,
           description: item.description,
-          restaurantName: item.restaurantName,
-          veg: item.veg
+          instructor: item.instructor,
+          duration: item.duration,
+          level: item.level
         }];
       }
     });

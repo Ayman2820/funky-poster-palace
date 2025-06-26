@@ -1,97 +1,103 @@
 
-import { ShoppingCart, Home, Utensils, Filter } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { ShoppingCart, User, Search, BookOpen } from "lucide-react";
 import { useCart } from "@/context/CartContext";
 
 interface HeaderProps {
-  currentPage: string;
+  currentPage: "home" | "course" | "cart" | "checkout";
   setCurrentPage: (page: "home" | "cart" | "checkout") => void;
-  selectedCategory: "all" | "fast-food" | "indian" | "chinese" | "italian";
-  setSelectedCategory: (category: "all" | "fast-food" | "indian" | "chinese" | "italian") => void;
+  selectedCategory: "all" | "programming" | "mathematics" | "science" | "business";
+  setSelectedCategory: (category: "all" | "programming" | "mathematics" | "science" | "business") => void;
 }
 
 export const Header = ({ currentPage, setCurrentPage, selectedCategory, setSelectedCategory }: HeaderProps) => {
   const { getTotalItems } = useCart();
-  const totalItems = getTotalItems();
+
+  const categories = [
+    { id: "all", label: "All Courses" },
+    { id: "programming", label: "Programming" },
+    { id: "mathematics", label: "Mathematics" },
+    { id: "science", label: "Science" },
+    { id: "business", label: "Business" }
+  ];
 
   return (
-    <header className="bg-white/80 backdrop-blur-md border-b border-orange-100 sticky top-0 z-50">
-      <div className="container mx-auto px-4 py-4">
-        <div className="flex items-center justify-between mb-4">
+    <header className="bg-white/80 backdrop-blur-md border-b border-gray-200 sticky top-0 z-50">
+      <div className="container mx-auto px-4">
+        <div className="flex items-center justify-between h-16">
           <div 
-            className="flex items-center space-x-2 cursor-pointer hover-scale"
+            className="flex items-center space-x-2 cursor-pointer"
             onClick={() => setCurrentPage("home")}
           >
-            <Utensils className="h-8 w-8 text-orange-600 fill-orange-600" />
-            <span className="text-2xl font-bold bg-gradient-to-r from-orange-600 to-red-600 bg-clip-text text-transparent">
-              FoodieHub
+            <BookOpen className="h-8 w-8 text-indigo-600" />
+            <span className="text-2xl font-bold bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">
+              EduVidya
             </span>
           </div>
-          
-          <nav className="flex items-center space-x-4">
-            <Button
-              variant={currentPage === "home" ? "default" : "ghost"}
-              onClick={() => setCurrentPage("home")}
-              className="hover-scale"
-            >
-              <Home className="h-4 w-4 mr-2" />
-              Home
-            </Button>
+
+          {currentPage === "home" && (
+            <div className="hidden md:flex items-center space-x-1 bg-gray-100 rounded-lg p-1">
+              {categories.map((category) => (
+                <Button
+                  key={category.id}
+                  variant={selectedCategory === category.id ? "default" : "ghost"}
+                  size="sm"
+                  onClick={() => setSelectedCategory(category.id as any)}
+                  className={selectedCategory === category.id ? "bg-indigo-600 hover:bg-indigo-700" : ""}
+                >
+                  {category.label}
+                </Button>
+              ))}
+            </div>
+          )}
+
+          <div className="flex items-center space-x-4">
+            <div className="hidden md:flex items-center space-x-2 bg-gray-100 rounded-lg px-4 py-2">
+              <Search className="h-4 w-4 text-gray-500" />
+              <input
+                type="text"
+                placeholder="Search courses..."
+                className="bg-transparent outline-none text-sm"
+              />
+            </div>
             
             <Button
-              variant={currentPage === "cart" ? "default" : "ghost"}
+              variant="ghost"
+              size="sm"
               onClick={() => setCurrentPage("cart")}
-              className="relative hover-scale"
+              className="relative"
             >
-              <ShoppingCart className="h-4 w-4 mr-2" />
-              Cart
-              {totalItems > 0 && (
-                <span className="absolute -top-2 -right-2 bg-red-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center animate-pulse">
-                  {totalItems}
+              <ShoppingCart className="h-5 w-5" />
+              {getTotalItems() > 0 && (
+                <span className="absolute -top-2 -right-2 bg-indigo-600 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">
+                  {getTotalItems()}
                 </span>
               )}
             </Button>
-          </nav>
+            
+            <Button variant="ghost" size="sm">
+              <User className="h-5 w-5" />
+            </Button>
+          </div>
         </div>
-        
+
         {currentPage === "home" && (
-          <div className="flex items-center justify-center space-x-2">
-            <Filter className="h-4 w-4 text-gray-600" />
-            <Button
-              variant={selectedCategory === "all" ? "default" : "outline"}
-              onClick={() => setSelectedCategory("all")}
-              className="hover-scale"
-            >
-              All Cuisines
-            </Button>
-            <Button
-              variant={selectedCategory === "fast-food" ? "default" : "outline"}
-              onClick={() => setSelectedCategory("fast-food")}
-              className="hover-scale bg-orange-500 hover:bg-orange-600 text-white"
-            >
-              Fast Food
-            </Button>
-            <Button
-              variant={selectedCategory === "indian" ? "default" : "outline"}
-              onClick={() => setSelectedCategory("indian")}
-              className="hover-scale bg-amber-500 hover:bg-amber-600 text-white"
-            >
-              Indian
-            </Button>
-            <Button
-              variant={selectedCategory === "chinese" ? "default" : "outline"}
-              onClick={() => setSelectedCategory("chinese")}
-              className="hover-scale bg-red-500 hover:bg-red-600 text-white"
-            >
-              Chinese
-            </Button>
-            <Button
-              variant={selectedCategory === "italian" ? "default" : "outline"}
-              onClick={() => setSelectedCategory("italian")}
-              className="hover-scale bg-green-500 hover:bg-green-600 text-white"
-            >
-              Italian
-            </Button>
+          <div className="md:hidden pb-4">
+            <div className="flex overflow-x-auto space-x-2">
+              {categories.map((category) => (
+                <Button
+                  key={category.id}
+                  variant={selectedCategory === category.id ? "default" : "outline"}
+                  size="sm"
+                  onClick={() => setSelectedCategory(category.id as any)}
+                  className={`whitespace-nowrap flex-shrink-0 ${
+                    selectedCategory === category.id ? "bg-indigo-600 hover:bg-indigo-700" : ""
+                  }`}
+                >
+                  {category.label}
+                </Button>
+              ))}
+            </div>
           </div>
         )}
       </div>
